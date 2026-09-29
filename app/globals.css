@@ -1,26 +1,234 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ------------------------------------------------------------------ */
+/* Design tokens                                                      */
+/* ------------------------------------------------------------------ */
+@theme {
+  --color-ivory: #fffdf9;
+  --color-card: #fffdf9;
+  --color-cream: #fdf7ef;
+  --color-sand: #f7ecdf;
+  --color-sand-deep: #efdfcc;
+  --color-nude: #d9bfa4;
+  --color-bronze: #986a3e;
+  --color-umber: #70441b;
+  --color-espresso: #633b2c;
+  --color-cocoa: #2a1a14;
+  --color-muted: #7a685d;
+  --color-line: rgb(99 59 44 / 0.14);
+
+  --font-serif: var(--font-hedvig), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --radius-card: 1.75rem;
+  --radius-panel: 2.25rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Dark theme — same token names, remapped. `ivory` stays light: it   */
+/* is the on-photo / on-cocoa text colour. Surfaces use `card`.       */
+/* ------------------------------------------------------------------ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
 }
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-card: #231915;
+  --color-cream: #15100d;
+  --color-sand: #1f1612;
+  --color-sand-deep: #2b1f1a;
+  --color-nude: #6e5646;
+  --color-bronze: #d6a676;
+  --color-umber: #e3bd93;
+  --color-espresso: #f3e7da;
+  --color-cocoa: #2a1c16;
+  --color-muted: #b3a194;
+  --color-line: rgb(243 231 218 / 0.14);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  transition:
+    background-color 0.4s var(--ease-editorial),
+    color 0.4s var(--ease-editorial);
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                               */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: auto;
+  }
+
+  body {
+    background: var(--color-cream);
+    color: var(--color-espresso);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-espresso);
+    color: var(--color-cream);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-bronze);
+    outline-offset: 3px;
+    border-radius: 999px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+/* ------------------------------------------------------------------ */
+/* Utilities                                                          */
+/* ------------------------------------------------------------------ */
+@utility container-site {
+  width: 100%;
+  max-width: 88rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 48rem) {
+    padding-inline: 1.5rem;
+  }
+}
+
+@utility container-narrow {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (width >= 48rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility section-y {
+  padding-block: 5.5rem;
+  @media (width >= 64rem) {
+    padding-block: 8.5rem;
+  }
+}
+
+@utility text-display {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 6.3vw, 6.15rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+@utility text-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 5.2vw, 4.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+@utility text-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 2.6vw, 2.35rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+@utility text-statement {
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 3.3vw, 3.05rem);
+  line-height: 1.22;
+  letter-spacing: -0.02em;
+}
+
+@utility glass {
+  background: rgb(255 253 249 / 0.14);
+  border: 1px solid rgb(255 253 249 / 0.28);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  backdrop-filter: blur(14px) saturate(120%);
+}
+
+@utility glass-warm {
+  background: rgb(99 59 44 / 0.34);
+  border: 1px solid rgb(255 253 249 / 0.2);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  backdrop-filter: blur(16px) saturate(120%);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Results bento — named areas only apply at desktop widths */
+@media (width >= 64rem) {
+  .bento {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      "ba exp stat"
+      "ba tail rate"
+      "free img rate";
+  }
+  .bento > * {
+    grid-area: var(--area);
+  }
+}
+
+/* Marquee */
+@keyframes marquee-y {
+  to {
+    transform: translateY(-50%);
+  }
+}
+@keyframes marquee-x {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee-y {
+  animation: marquee-y 28s linear infinite;
+}
+.animate-marquee-x {
+  animation: marquee-x 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-y,
+  .animate-marquee-x {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
 }
